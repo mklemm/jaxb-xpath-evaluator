@@ -6,10 +6,12 @@
 
 	<groupId>net.codesup.util</groupId>
 	<artifactId>jaxb-xpath-evaluator</artifactId>
-	<version>1.2.0-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 
 	<name>JAXB Bean XPath Evaluator</name>
-	<description>Utility classes to evaluate XPath expressions on a JAXB-serializable object tree. This implementation uses JAXB-to-DOM serialization to generate a DOM that is supported by the standard XPath implementation.</description>
+	<description>Utility classes to evaluate XPath expressions on a JAXB-serializable object tree.
+		This implementation uses JAXB-to-DOM serialization to generate a DOM that is supported by
+		the standard XPath implementation.</description>
 	<packaging>jar</packaging>
 	<url>https://github.com/mklemm/jaxb-xpath-evaluator</url>
 		<licenses>
@@ -40,6 +42,12 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.codesup.util</groupId>
+			<artifactId>jxpath-object-formatter</artifactId>
+			<version>1.2.0-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

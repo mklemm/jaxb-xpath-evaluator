@@ -1,11 +1,18 @@
-# jxpath-object-formatter
-Thin wrapper for apache commons-jxpath to provide a simple interface for creating string representations of objects using XPath expressions.
-
-This uses a [patched version](http://github.com/mklemm/commons-jxpath) of apache commons-jxpath to allow for XPath expressions that use the XML names of JAXB-serializable objects instead of pure java bean property names, so this module ist best used with the JAXB XJC plugin [jaxb-format-plugin](http://github.com/mklemm/jaxb-format-plugin).
+# jaxb-jxpath-evaluator
+Evaluates XPath expressions on JAXB-serializable objects.
+This implementation - other than jxpath-object-formatter - uses
+the standard JAXB, JAXP and XPath APIs to evaluate the XPath.
+This is somewhat slower than the JXPath approach, but much more accurate
+and reliable, since XPath is actually evaluated on he XML representation
+of the JAXB objects, which will of course have to be at least partially
+serialized to a DOM tree, whereas JXPath works directly on the beans in memory.
 
 Specify the class
-    com.kscs.util.jaxb.ObjectFormatter
-as an argument to the "-formatter" command line option of the jaxb-format-plugin, then annotate your XSD complexTypes
-with the "expression" binding customization, setting the "select" attribute to an XPath expression that evaluates to a string value.
+    net.codesup.jaxb.xpath.Evaluator
+in an "evaluator" element of a jaxb-format-plugin configuration, then
+annotate your XSD complexTypes with the "expression" binding customization,
+setting the "select" attribute to an XPath expression, and it will generate
+an additional method in your generated class that returns the result of
+the XPath expression evaluation on the current object.
 
 
