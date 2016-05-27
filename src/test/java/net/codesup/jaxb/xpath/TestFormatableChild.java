@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlType;
  * Created by klemm0 on 2015-01-22.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name ="test-formatable-child", propOrder = {"name", "displayName", "value", "spacing", "underwritingAmount"})
+@XmlType(name ="test-formatable-child", propOrder = {"name", "displayName", "value", "spacing", "underwritingAmount", "parent"})
 public class TestFormatableChild {
 	@XmlAttribute
 	private String name;
@@ -25,6 +25,8 @@ public class TestFormatableChild {
 	private BigDecimal spacing;
 	@XmlElement(name = "underwriting-amount")
 	private double underwritingAmount;
+	@XmlElement(name = "empty-element")
+	private TestFormatableObject parent;
 
 	public TestFormatableChild(final String name, final String displayName, final BigInteger value, final BigDecimal spacing, final double underwritingAmount) {
 		this.name = name;
@@ -75,5 +77,13 @@ public class TestFormatableChild {
 
 	public void setUnderwritingAmount(final double underwritingAmount) {
 		this.underwritingAmount = underwritingAmount;
+	}
+
+	public TestFormatableObject getParent() {
+		return this.parent;
+	}
+
+	public void setParent(final TestFormatableObject parent) {
+		this.parent = parent;
 	}
 }

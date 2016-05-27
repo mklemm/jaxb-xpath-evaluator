@@ -72,9 +72,11 @@ public class XPathExtensionFunctions implements XPathFunctionResolver {
 		addFunction(new Decode());
 		addFunction(new Coalesce());
 		addFunction(new Format());
-		addFunction(new DateFunc());
+		addFunction(new FormatDate());
+		addFunction(new ToDate());
 		addFunction(new Hash());
 		addFunction(new FormatNumber());
+		addFunction(new Decimal());
 	}
 
 	private void addFunction(final Func func) {
@@ -82,11 +84,11 @@ public class XPathExtensionFunctions implements XPathFunctionResolver {
 	}
 
 	public String isoDate(final Date date) {
-		return date(date, "yyyy-MM-dd");
+		return formatDate(date, "yyyy-MM-dd");
 	}
 
 	public String isoDateTime(final Date date) {
-		return date(date, "yyyy-MM-dd'T'HH:mm:ssZ");
+		return formatDate(date, "yyyy-MM-dd'T'HH:mm:ssZ");
 	}
 
 	public Object decode(final Object ref, final List<?> keyValues, final Object def) {
@@ -140,8 +142,16 @@ public class XPathExtensionFunctions implements XPathFunctionResolver {
 		return fmt.format(number);
 	}
 
-	public String date(final Date date, final String pattern) {
+	public String formatDate(final Date date, final String pattern) {
 		return new SimpleDateFormat(pattern).format(date);
+	}
+
+	public Date date(final Object arg) {
+		return asDate(arg);
+	}
+
+	public BigDecimal decimal(final Object arg) {
+		return asNumber(arg);
 	}
 
 	public int hash(final Object o) {
@@ -221,7 +231,7 @@ public class XPathExtensionFunctions implements XPathFunctionResolver {
 
 		@Override
 		public Object invoke(final List<?> args) {
-			if (args.size() % 2 == 0) {
+			if (args.size() % 2 == 1) {
 				args.add(null);
 			}
 			final Object ref = args.get(0);
@@ -264,14 +274,25 @@ public class XPathExtensionFunctions implements XPathFunctionResolver {
 		}
 	}
 
-	private class DateFunc extends Func {
-		public DateFunc() {
-			super("date", "date:dateTime, format:string", 2, 2);
+	private class ToDate extends Func {
+		public ToDate() {
+			super("date", "val:string", 1, 1);
 		}
 
 		@Override
 		public Object invoke(final List<?> args) {
-			return date((Date)args.get(0), (String)args.get(1));
+			return date(args.get(0));
+		}
+	}
+
+	private class FormatDate extends Func {
+		public FormatDate() {
+			super("format-date", "date:dateTime, format:string", 2, 2);
+		}
+
+		@Override
+		public Object invoke(final List<?> args) {
+			return formatDate(asDate(args.get(0)), asString(args.get(1)));
 		}
 	}
 
@@ -286,6 +307,17 @@ public class XPathExtensionFunctions implements XPathFunctionResolver {
 		}
 	}
 
+	private class Decimal extends Func {
+		public Decimal() {
+			super("decimal", "val", 1, 1);
+		}
+
+		@Override
+		public Object invoke(final List<?> args) {
+			return decimal(args.get(0));
+		}
+	}
+
 	private static String asString(final Object o) {
 		if(o == null) return null;
 		if(o instanceof String) return (String)o;
@@ -297,9 +329,9 @@ public class XPathExtensionFunctions implements XPathFunctionResolver {
 		}
 	}
 
-	private static Number asNumber(final Object o) {
+	private static BigDecimal asNumber(final Object o) {
 		if(o == null) return null;
-		if(o instanceof Number) return (Number)o;
+		if(o instanceof BigDecimal) return (BigDecimal)o;
 		return new BigDecimal(asString(o));
 	}
 

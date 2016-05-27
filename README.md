@@ -16,7 +16,7 @@ is cleaner, more predictable, and more accurate than the JXPath implementation.
 
 Specify the class
     net.codesup.jaxb.xpath.Evaluator
-in an "evaluator" element of a jaxb-format-plugin configuration, then
+in an "evaluator" element of a jaxb-expression-plugin configuration, then
 annotate your XSD complexTypes with the "expression" binding customization,
 setting the "select" attribute to an XPath expression, and it will generate
 an additional method in your generated class that returns the result of
